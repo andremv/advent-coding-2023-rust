@@ -5,27 +5,22 @@ fn main() {
 }
 
 fn part1(input: &str) -> String {
-    let mut sum: i64 = 0;
+    let mut sum: u32 = 0;
     let lines: Vec<&str> = input.lines().collect();
     for line in lines {
-        let mut first: i64 = -1;
-        let mut last: i64 = -1;
+        let mut first: Option<u32> = None;
+        let mut last: Option<u32> = None;
         for c in line.chars() {
-            if let Some(number) = c.to_digit(10) {
-                if first == -1 {
-                    first = number as i64;
-                } else {
-                    last = number as i64;
+            let number = c.to_digit(10);
+            if number.is_some() {
+                if first.is_none() {
+                    first = number;
                 }
+                last = number;
             }
         }
-        if first != -1 && last != -1 {
-            sum = sum + first * 10 + last;
-        } else if first > -1 && last == -1 {
-            sum = sum + first * 10 + first;
-        }
+        sum = sum + first.unwrap_or_default() * 10 + last.unwrap_or_default();
     }
-
     return sum.to_string();
 }
 

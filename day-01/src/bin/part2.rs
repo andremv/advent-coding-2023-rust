@@ -7,18 +7,18 @@ fn main() {
 }
 
 fn part2(input: &str) -> String {
-    let mut sum: i64 = 0;
-
-    let mut num_map: HashMap<String, String> = HashMap::new();
-    num_map.insert(String::from("one"), String::from("o1e"));
-    num_map.insert(String::from("two"), String::from("t2o"));
-    num_map.insert(String::from("three"), String::from("t3e"));
-    num_map.insert(String::from("four"), String::from("f4r"));
-    num_map.insert(String::from("five"), String::from("f5e"));
-    num_map.insert(String::from("six"), String::from("s6x"));
-    num_map.insert(String::from("seven"), String::from("s7n"));
-    num_map.insert(String::from("eight"), String::from("e8t"));
-    num_map.insert(String::from("nine"), String::from("n9e"));
+    let mut sum: u32 = 0;
+    let num_map = HashMap::from([
+        ("one", "o1e"),
+        ("two", "t2o"),
+        ("three", "t3e"),
+        ("four", "f4r"),
+        ("five", "f5e"),
+        ("six", "s6x"),
+        ("seven", "s7n"),
+        ("eight", "e8t"),
+        ("nine", "n9e")
+    ]);
 
     let lines: Vec<&str> = input.lines().collect();
     for line in lines {
@@ -42,22 +42,18 @@ fn part2(input: &str) -> String {
             }
         }
 
-        let mut first: i64 = -1;
-        let mut last: i64 = -1;
+        let mut first: Option<u32> = None;
+        let mut last: Option<u32> = None;
         for c in linex.chars() {
-            if let Some(number) = c.to_digit(10) {
-                if first == -1 {
-                    first = number as i64;
-                } else {
-                    last = number as i64;
+            let number = c.to_digit(10);
+            if number.is_some() {
+                if first.is_none() {
+                    first = number;
                 }
+                last = number;
             }
         }
-        if first != -1 && last != -1 {
-            sum = sum + first * 10 + last;
-        } else if first > -1 && last == -1 {
-            sum = sum + first * 10 + first;
-        }
+        sum = sum + first.unwrap_or_default() * 10 + last.unwrap_or_default();
     }
 
     return sum.to_string();
